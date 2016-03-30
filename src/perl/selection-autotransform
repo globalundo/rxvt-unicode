@@ -68,6 +68,7 @@ sub on_init {
       }
    }
 
+   $self->{quiet} = $self->x_resource_boolean("%.quiet");
    $self->{enabled} = 1;
 
    push @{ $self->{term}{option_popup_hook} }, sub {
@@ -91,7 +92,9 @@ sub on_sel_grab {
       if ($text ne $_) {
          $self->selection ($_);
          s/[\x00-\x1f\x80-\x9f]/·/g;
-         $self->msg ($self->special_encode ("auto-transformed to $_"));
+         if (!$self->{quiet}) {
+            $self->msg ($self->special_encode ("auto-transformed to $_"));
+         }
          last;
       }
    }
